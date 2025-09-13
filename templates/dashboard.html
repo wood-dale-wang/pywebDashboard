@@ -1,0 +1,44 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dashboard_config.title }}</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <script src="/static/js/dashboard.js"></script>
+</head>
+<body class="theme-{{ dashboard_config.theme }}">
+    <div class="dashboard-header">
+        <h1>{{ dashboard_config.title }}</h1>
+        <div class="dashboard-controls">
+            <button onclick="refreshAllWidgets()">刷新全部</button>
+            <button onclick="toggleLayout()">切换布局</button>
+        </div>
+    </div>
+    
+    <div class="dashboard-container layout-{{ dashboard_config.layout }}">
+        {% for widget in widgets %}
+        <div class="widget" data-widget-name="{{ widget.name }}" data-position="{{ widget.position }}">
+            <div class="widget-header">
+                <h3>{{ widget.config.title }}</h3>
+                <div class="widget-controls">
+                    <span class="widget-status" id="status-{{ widget.name }}">●</span>
+                    <button onclick="refreshWidget('{{ widget.name }}')">刷新</button>
+                </div>
+            </div>
+            <div class="widget-content" id="widget-{{ widget.name }}">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // 初始化仪表盘
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard({{ widgets | tojson }});
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+# config.yaml
+server:
+  host: "0.0.0.0"
+  port: 8000
+
+dashboard:
+  title: "我的仪表盘"
+  theme: "dark"
+  layout: "grid"  # grid, list, masonry
+
+static_dir: "static"
+template_dir: "templates"
+
+modules:
+  weather:
+    enabled: false
+    position: "top-left"
+    class_name: "WeatherModule"
+    settings:
+      title: "天气信息"
+      type: "card"
+      refresh_interval: 300000  # 5分钟
+      api_key: "your_weather_api_key"
+      city: "北京"
+  
+  system:
+    enabled: true
+    position: "top-left"
+    class_name: "SystemModule"
+    settings:
+      title: "系统状态"
+      type: "card"
+      refresh_interval: 10000  # 10秒
+  
+  news:
+    enabled: true
+    position: "top-right"
+    class_name: "NewsModule"
+    settings:
+      title: "最新新闻"
+      type: "list"
+      refresh_interval: 600000  # 10分钟
+      source: "tech"
+      max_items: 5
