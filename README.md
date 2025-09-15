@@ -39,6 +39,46 @@ modular-dashboard/
         └── dashboard.js    # 前端脚本
 ```
 
+## 接口
+
+**模块接口**：
+```python
+class BaseModule:
+    async def get_data(self) -> dict[str, Any]: ...
+    def get_widget_config(self) -> dict[str, Any]: ...
+```
+
+**显示接口**:
+
+1. 在`config.yaml`中的模块的`type`接受的参数，以及每个`type`的需求值:
++ card
+  + value
+  + label
+  + subtitle(可选)
++ chart(例如system的展示)
+  + \[items\](多条)
+    + type:`stacked-bar-chart`(横向堆积条形统计图)
+      + total: 必须，表示总数
+      + \[items\]: 可选、多项，表示各个条目使用量(接受数值而非比例)
+    + type:`table`(表格)
+      + \[items\]: 可选、多项，表示一个键值对条目(key:value)，其中item的名称会作为key出现
++ list(暂用于RSS展示)
+  + \[items\](多条)
+    + title(第一行，标题)
+    + summary(第二行，内容)
+    + author(第三行左下)
+    + meta(一般时间，第三行右下)
++ digital(暂用于时间展示)
+  + time
+  + date
+
+2. 在`config.yaml`中的模块的`position`接受的参数(dashborad.css中具体化为grid位置):
++ `top-left`:定位到1~2列
++ `top-right`:定位到-1~-2列
++ `center`:占满一行，最小宽度 `600px`
++ `bottom`:占满一行，最小宽度 `800px`
+
+
 ## 核心组件
 
 ### 1. 引擎（engine.py）
@@ -254,24 +294,9 @@ export LOG_LEVEL=DEBUG
 python run.py
 ```
 
-## 安全考虑
-
-1. **输入验证**：所有用户输入都经过验证
-2. **CORS**：配置跨域策略
-3. **速率限制**：可添加中间件限制请求频率
-4. **认证**：生产环境建议添加认证
-
-## 版本管理
-
-使用语义化版本控制（SemVer）：
-
-- 主版本：不兼容的 API 变更
-- 次版本：向下兼容的功能性新增
-- 修订号：向下兼容的问题修正
-
 ## 更新日志
 
-### v1.0.0 (2024-01-01)
+### v0.1.0 (2025-09-13)
 - 初始版本
 - 支持模块化架构
 - 内置 4 个基础模块

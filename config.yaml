@@ -4,7 +4,7 @@ server:
   port: 8000
 
 dashboard:
-  title: "我的仪表盘"
+  title: "仪表盘"
   theme: "dark"
   layout: "grid"  # grid, list, masonry
 
@@ -29,7 +29,7 @@ modules:
     class_name: "SystemModule"
     settings:
       title: "系统状态"
-      type: "card"
+      type: "chart"
       refresh_interval: 10000  # 10秒
   
   news:
@@ -42,3 +42,13 @@ modules:
       refresh_interval: 600000  # 10分钟
       source: "tech"
       max_items: 5
+  
+  clock:
+    enabled: true
+    position: "top-left"
+    class_name: "ClockModule"
+    settings:
+      title: "当前时间"
+      type: "digital"
+      refresh_interval: 1000  # 1秒
+      timezone: "Asia/Shanghai"

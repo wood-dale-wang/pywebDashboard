@@ -46,12 +46,22 @@ class DashboardManager {
         }
     }
 
+    renderCard(data) {
+        return `
+            <div class="card-widget">
+                <div class="card-value">${data.value || 'N/A'}</div>
+                <div class="card-label">${data.label || ''}</div>
+                ${data.subtitle ? `<div class="card-subtitle">${data.subtitle}</div>` : ''}
+            </div>
+        `;
+    }
+
     /**
-     * 将数据对象渲染为 HTML 卡片字符串
+     * 将数据对象渲染为 HTML 表格字符串
      * @param {Object} data - 包含多个数据对象的对象
      * @returns {string} - 生成的 HTML 字符串
      */
-    renderCard(data) {
+    renderChart(data) {
         // 用于累积最终 HTML 的数组
         const htmlParts = [];
 
@@ -100,20 +110,6 @@ class DashboardManager {
             // 可继续扩展其它 type
         }
         return htmlParts.join('');
-    }
-
-    renderChart(data) {
-        // 简单的图表渲染，实际项目中可以使用Chart.js等库
-        return `
-            <div class="chart-widget">
-                <canvas id="chart-${Date.now()}"></canvas>
-                <div class="chart-legend">
-                    ${data.series ? data.series.map((s, i) =>
-            `<span class="legend-item" style="color: ${this.getColor(i)}">${s.name}</span>`
-        ).join('') : ''}
-                </div>
-            </div>
-        `;
     }
 
     renderList(data) {

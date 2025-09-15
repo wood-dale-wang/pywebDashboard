@@ -2,6 +2,7 @@
 from typing import Any
 import psutil
 import platform
+import requests
 from datetime import datetime
 from engine import BaseModule
 
@@ -24,6 +25,11 @@ class SystemModule(BaseModule):
             
             # 获取网络信息
             net_io = psutil.net_io_counters()
+
+            # 获取ip
+            ip_inf_res=requests.get('http://myip.ipip.net', timeout=5).text
+            ip_inf_res_index=ip_inf_res.find('：')
+            ip_inf=ip_inf_res[ip_inf_res_index+1:ip_inf_res_index+15]
             
             # 获取系统启动时间
             boot_time = datetime.fromtimestamp(psutil.boot_time())
@@ -47,6 +53,7 @@ class SystemModule(BaseModule):
                 },
                 'network': {
                     'type': 'table',
+                    'ip': ip_inf,
                     'bytes_sent': net_io.bytes_sent,
                     'bytes_recv': net_io.bytes_recv,
                     'packets_sent': net_io.packets_sent,
@@ -67,7 +74,7 @@ class SystemModule(BaseModule):
         """获取widget配置"""
         config = super().get_widget_config()
         config.update({
-            'type': 'card',
+            'type': 'chart',
             'metrics': ['cpu', 'memory', 'disk'],
             'refresh_interval': 10000  # 10秒
         })
