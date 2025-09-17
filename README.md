@@ -44,8 +44,9 @@ modular-dashboard/
 **模块接口**：
 ```python
 class BaseModule:
-    async def get_data(self) -> dict[str, Any]: ...
+    async def get_data(self) -> dict[str, Any]: ... #必须
     def get_widget_config(self) -> dict[str, Any]: ...
+    async def post_data(self,require:dict[str, Any]) -> Dict[str, Any]: ...
 ```
 
 **显示接口**:
@@ -71,6 +72,9 @@ class BaseModule:
 + digital(暂用于时间展示)
   + time
   + date
++ subpage: 在widget块内装置自定义html和js，注意js只有单独装载的会生效
+  + html: (必须)自定义的html代码
+  + script: (可选)自定义的js代码
 
 2. 在`config.yaml`中的模块的`position`接受的参数(dashborad.css中具体化为grid位置):
 + `top-left`:定位到1~2列
@@ -296,7 +300,10 @@ python run.py
 
 ## 更新日志
 
-### v0.1.0 (2025-09-13)
+### 2025-09-13
 - 初始版本
 - 支持模块化架构
 - 内置 4 个基础模块
+
+### 2025-09-17
+- 支持post交互，添加自定义html+js接口

@@ -3,9 +3,9 @@ from typing import Any
 import aiohttp
 import feedparser
 from datetime import datetime
-from engine import BaseModule
+from engine import WidgetBaseModule
 
-class NewsModule(BaseModule):
+class NewsModule(WidgetBaseModule):
     def __init__(self, settings):
         super().__init__(settings)
         self.source = settings.get('source', 'tech')

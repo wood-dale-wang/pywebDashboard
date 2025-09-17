@@ -33,7 +33,7 @@ modules:
       refresh_interval: 10000  # 10秒
   
   news:
-    enabled: true
+    enabled: false
     position: "top-right"
     class_name: "NewsModule"
     settings:
@@ -44,7 +44,7 @@ modules:
       max_items: 5
   
   clock:
-    enabled: true
+    enabled: false
     position: "top-left"
     class_name: "ClockModule"
     settings:
@@ -52,3 +52,12 @@ modules:
       type: "digital"
       refresh_interval: 1000  # 1秒
       timezone: "Asia/Shanghai"
+  
+  postTest:
+    enabled: true
+    position: "top-right"
+    class_name: "postTest"
+    settings:
+      title: "ppp"
+      type: "subpage"
+      refresh_interval: 300000  # 5分钟

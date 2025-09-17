@@ -41,6 +41,9 @@ class DashboardManager {
             case 'digital':
                 widgetElement.innerHTML = this.renderDigital(data);
                 break;
+            case 'subpage':
+                this.renderSubPage(data, widgetElement);
+                break;
             default:
                 widgetElement.innerHTML = this.renderDefault(data);
         }
@@ -136,6 +139,17 @@ class DashboardManager {
                 <div class="digital-date">${data.date || ''}</div>
             </div>
         `;
+    }
+
+    // 接收HTML代码和js脚本
+    renderSubPage(data, widgetElement) {
+        widgetElement.innerHTML = data.html;
+        if (data.script != undefined) {
+            const script = document.createElement('script');
+            script.textContent = data.script;
+            widgetElement.appendChild(script);
+        }
+        return;
     }
 
     updateWidgetStatus(widgetName, status) {

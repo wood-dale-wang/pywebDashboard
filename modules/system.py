@@ -4,9 +4,9 @@ import psutil
 import platform
 import requests
 from datetime import datetime
-from engine import BaseModule
+from engine import WidgetBaseModule
 
-class SystemModule(BaseModule):
+class SystemModule(WidgetBaseModule):
     def __init__(self, settings):
         super().__init__(settings)
         self.history_size = settings.get('history_size', 60)

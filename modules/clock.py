@@ -2,9 +2,9 @@
 from datetime import datetime
 from typing import Any
 import pytz
-from engine import BaseModule
+from engine import WidgetBaseModule
 
-class ClockModule(BaseModule):
+class ClockModule(WidgetBaseModule):
     def __init__(self, settings):
         super().__init__(settings)
         self.timezone = pytz.timezone(settings.get('timezone', 'UTC'))

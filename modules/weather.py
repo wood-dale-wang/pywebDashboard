@@ -3,9 +3,9 @@ from typing import Any
 import aiohttp
 import asyncio
 from datetime import datetime
-from engine import BaseModule
+from engine import WidgetBaseModule
 
-class WeatherModule(BaseModule):
+class WeatherModule(WidgetBaseModule):
     def __init__(self, settings):
         super().__init__(settings)
         self.api_key = settings.get('api_key')

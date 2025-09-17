@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
 class DashboardEngine:
     def __init__(self, config_path: str = "config.yaml"):
@@ -94,6 +95,26 @@ class DashboardEngine:
                 }
             )
 
+        @self.app.post("/api/widget/{widget_name}")
+        async def post_widget_data(widget_name: str, payload: JsonPayload):#,request: Request):
+            """
+            把客户端 POST 过来的 JSON 原样传给对应 widget 的 post_data() 方法
+            """
+            # raw = await request.body()                    # 原始字节
+            # print("[raw-body]", raw)                      # 应该能看到 b'{"region":"CN"...}'
+            # print("[parsed]  ", payload)                  # 正常应显示 payload={...}
+            if widget_name not in self.modules:
+                return {"status": "error", "message": "Widget not found"}
+
+            try:
+                # payload 是 Pydantic 模型，.dict() 转成 dict 丢给业务层
+                #print(payload)
+                data = await self.modules[widget_name].post_data(payload.model_dump())
+                return {"status": "success", "data": data}
+            except Exception as e:
+                # 也可以 raise HTTPException(status_code=400, detail=str(e))
+                return {"status": "error", "message": str(e)}
+        
         @self.app.get("/api/widget/{widget_name}")
         async def get_widget_data(widget_name: str):
             """获取特定widget的数据"""
@@ -124,7 +145,7 @@ class DashboardEngine:
 
 
 # 示例模块基类
-class BaseModule:
+class WidgetBaseModule:
     """所有模块的基类"""
     
     def __init__(self, settings: Dict[str, Any]):
@@ -134,6 +155,11 @@ class BaseModule:
         """获取模块数据，子类必须实现"""
         raise NotImplementedError
     
+    async def post_data(self,require:dict[str, Any]) -> Dict[str, Any]:
+        """POST接口"""
+        #默认行为
+        return require
+    
     def get_widget_config(self) -> Dict[str, Any]:
         """获取widget配置"""
         return {
@@ -142,6 +168,14 @@ class BaseModule:
             "refresh_interval": self.settings.get('refresh_interval', 5000)
         }
 
+# 如果想对请求体做强校验，就写个 Pydantic 模型；
+# 这里为了通用，直接用 BaseModel 当“任意 JSON”容器
+class JsonPayload(BaseModel):
+    class Config:
+        extra = 'allow'          # 允许未声明字段
+
+    # 下面可以再放几个“已知”字段，可选
+    # region: str = None
 
 # 使用示例
 if __name__ == "__main__":
