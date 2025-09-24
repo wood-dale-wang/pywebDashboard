@@ -135,7 +135,7 @@ class DashboardEngine:
                 "widgets": len(self.widgets)
             }
 
-    def run(self, host: str = None, port: int = None):
+    def run(self, host: str = '', port: int = 0):
         """启动仪表盘"""
         host = host or self.config.get('server', {}).get('host', '0.0.0.0')
         port = port or self.config.get('server', {}).get('port', 8000)
